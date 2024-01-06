@@ -1,0 +1,22 @@
+eureka:
+  instance:
+    hostname: localhost
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+
+spring:
+  application:
+    name: auth
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      auto-index-creation: true
+      database: nearbuddies_db
+      authentication-database: admin
+      username: root
+      password: rootpassword
+
+server:
+  port: 8009
