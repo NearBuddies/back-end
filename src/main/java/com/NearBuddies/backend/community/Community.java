@@ -1,7 +1,7 @@
-package com.NearBuddies.backend.community.model;
+package com.NearBuddies.backend.community;
 
-import com.NearBuddies.backend.membership.MembershipDTO;
-import com.NearBuddies.backend.community.Visibility;
+import com.NearBuddies.backend.membership.Membership;
+import com.NearBuddies.backend.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,21 +21,23 @@ public class Community {
     private String name;
     private String description;
     private Visibility visibility;
-    private UserDTO creator;
-    private UserDTO admin;
-    private double latitude;
-    private double longitude;
-    private List<MembershipDTO> members;
+    private User creator;
+    private User admin;
+    private String imgUrl;
+    private List<Membership> members;
 
     public Community(String name, String description, Visibility visibility,
-                     UserDTO creator, UserDTO admin, double latitude, double longitude) {
+                     User creator, User admin, String imgUrl) {
         this.name = name;
         this.description = description;
         this.visibility = visibility;
         this.creator = creator;
         this.admin = admin;
-        this.latitude = latitude;
-        this.longitude = longitude;
-        this.members = new ArrayList<MembershipDTO>();
+        this.imgUrl = imgUrl;
+        this.members = new ArrayList<Membership>();
+    }
+
+    public void addMember(User user){
+        members.add(new Membership(user));
     }
 }

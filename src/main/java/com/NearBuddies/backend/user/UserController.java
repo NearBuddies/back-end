@@ -1,4 +1,4 @@
-package com.NearBuddies.backend.User;
+package com.NearBuddies.backend.user;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

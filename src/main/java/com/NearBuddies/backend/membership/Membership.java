@@ -1,11 +1,13 @@
-package com.NearBuddies.backend.membership.model;
+package com.NearBuddies.backend.membership;
 
+import com.NearBuddies.backend.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Document(collection = "nearbuddies")
@@ -15,23 +17,23 @@ import java.util.Date;
 public class Membership {
     @Id
     private String id;
-    private Date joinedAt;
-    private Date leftAt;
+    private LocalDateTime joinedAt;
+    private LocalDateTime leftAt;
     private boolean isActive;
-    private UserDTO user;
+    private User user;
 
-    public Membership(Date joinedAt, Date leftAt, UserDTO user) {
-        this.joinedAt = joinedAt;
-        this.leftAt = leftAt;
+    public Membership(User user) {
+        this.joinedAt = LocalDateTime.now();
+        this.leftAt = null;
         this.user = user;
-        this.isActive = leftAt == null || leftAt.after(new Date());
+        this.isActive = leftAt == null;
     }
 
-    public void setJoinedAt(Date joinedAt) {
+    public void setJoinedAt(LocalDateTime joinedAt) {
         this.joinedAt = joinedAt;
     }
 
-    public void setLeftAt(Date leftAt) {
+    public void setLeftAt(LocalDateTime leftAt) {
         this.leftAt = leftAt;
         updateIsActive();
     }
@@ -41,10 +43,10 @@ public class Membership {
     }
 
     private void updateIsActive() {
-        this.isActive = leftAt == null || leftAt.after(new Date());
+        this.isActive = leftAt == null;
     }
 
-    public void setUser(UserDTO user) {
+    public void setUser(User user) {
         this.user = user;
     }
 }
