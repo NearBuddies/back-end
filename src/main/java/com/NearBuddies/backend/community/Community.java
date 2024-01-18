@@ -1,8 +1,7 @@
 package com.NearBuddies.backend.community.model;
 
 import com.NearBuddies.backend.membership.MembershipDTO;
-import com.NearBuddies.backend.user.UserDTO;
-import com.NearBuddies.backend.user.model.Visibility;
+import com.NearBuddies.backend.community.Visibility;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

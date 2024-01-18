@@ -6,7 +6,6 @@ import com.NearBuddies.backend.community.CommunityInternalAPI;
 import com.NearBuddies.backend.community.mapper.CommunityMapper;
 import com.NearBuddies.backend.community.model.Community;
 import com.NearBuddies.backend.community.repository.CommunityRepository;
-import com.NearBuddies.backend.user.UserDTO;
 import reactor.core.publisher.Mono;
 
 public class CommunityManagement implements CommunityInternalAPI, CommunityExternalAPI {

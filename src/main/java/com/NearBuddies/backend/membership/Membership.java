@@ -1,6 +1,5 @@
 package com.NearBuddies.backend.membership.model;
 
-import com.NearBuddies.backend.user.UserDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

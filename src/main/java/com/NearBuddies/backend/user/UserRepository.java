@@ -1,6 +1,5 @@
-package com.NearBuddies.backend.user.repository;
+package com.NearBuddies.backend.User;
 
-import com.NearBuddies.backend.user.model.User;
 import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
 import reactor.core.publisher.Mono;
 

@@ -1,4 +1,4 @@
-package com.NearBuddies.backend.user.model;
+package com.NearBuddies.backend.User;
 
 
 import lombok.AllArgsConstructor;
