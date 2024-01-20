@@ -10,7 +10,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import java.time.LocalDateTime;
 import java.util.Date;
 
-@Document(collection = "nearbuddies")
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -21,4 +21,11 @@ public class Membership {
     private LocalDateTime leftAt;
     private boolean isActive;
     private User user;
+
+    public Membership(LocalDateTime joinedAt, LocalDateTime leftAt, boolean isActive, User user){
+        this.joinedAt = joinedAt;
+        this.leftAt = leftAt;
+        this.isActive = isActive;
+        this.user = user;
+    }
 }

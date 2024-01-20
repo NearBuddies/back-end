@@ -44,7 +44,7 @@ public class CommunityController {
     @PostMapping("/join/{userId}/{communityId}")
     public Mono<ResponseEntity<?>> joinCommunity(@PathVariable("communityId") String communityId,
                                                  @PathVariable("userId") String userId) {
-        Community community = communityService.findCommunityById(communityId).block();
+        Community community = communityService.findById(communityId);
         User user = userService.findUserById(userId);
         return this.communityService.join(community, user)
                 .map( the_community ->
