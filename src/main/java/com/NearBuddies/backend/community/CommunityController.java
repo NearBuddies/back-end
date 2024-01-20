@@ -1,7 +1,6 @@
 package com.NearBuddies.backend.community;
 
 import com.NearBuddies.backend.Utils.CommunityUtils;
-import com.NearBuddies.backend.Utils.PhotoUtils;
 import com.NearBuddies.backend.user.User;
 import com.NearBuddies.backend.user.UserService;
 import org.springframework.http.HttpStatus;
@@ -37,17 +36,15 @@ public class CommunityController {
     }
 
     @GetMapping("/findOne/{id}")
-    public ResponseEntity<?> findCommunityById(@PathVariable("id") String communityId){
-        Community community = communityService.findCommunityById(communityId);
-        if (community!=null) return new ResponseEntity<>(community,HttpStatus.OK);
-        else return new ResponseEntity<>(HttpStatus.EXPECTATION_FAILED) ;
-
+    public Mono<ResponseEntity<Community>> findCommunityById(@PathVariable("id") String communityId){
+        return this.communityService.findCommunityById(communityId)
+                                    .map( the_community ->  ResponseEntity.status(HttpStatus.OK).body(the_community));
     }
 
     @PostMapping("/join/{userId}/{communityId}")
     public Mono<ResponseEntity<?>> joinCommunity(@PathVariable("communityId") String communityId,
                                                  @PathVariable("userId") String userId) {
-        Community community = communityService.findCommunityById(communityId);
+        Community community = communityService.findCommunityById(communityId).block();
         User user = userService.findUserById(userId);
         return this.communityService.join(community, user)
                 .map( the_community ->

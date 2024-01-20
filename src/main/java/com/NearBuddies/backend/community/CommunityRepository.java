@@ -4,5 +4,5 @@ import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
 import reactor.core.publisher.Mono;
 
 public interface CommunityRepository extends ReactiveMongoRepository<Community, String> {
-     Community findCommunityById(String id);
+     Mono<Community> findCommunityById(String id);
 }

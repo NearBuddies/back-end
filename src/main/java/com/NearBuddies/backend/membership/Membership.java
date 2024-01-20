@@ -21,32 +21,4 @@ public class Membership {
     private LocalDateTime leftAt;
     private boolean isActive;
     private User user;
-
-    public Membership(User user) {
-        this.joinedAt = LocalDateTime.now();
-        this.leftAt = null;
-        this.user = user;
-        this.isActive = leftAt == null;
-    }
-
-    public void setJoinedAt(LocalDateTime joinedAt) {
-        this.joinedAt = joinedAt;
-    }
-
-    public void setLeftAt(LocalDateTime leftAt) {
-        this.leftAt = leftAt;
-        updateIsActive();
-    }
-
-    public boolean isActive() {
-        return isActive;
-    }
-
-    private void updateIsActive() {
-        this.isActive = leftAt == null;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
 }

@@ -8,5 +8,5 @@ public interface CommunityService {
     public Mono<Community> create(Community community);
     public Mono<Community> join(Community community, User user);
 
-    Community findCommunityById(String communityId);
+    Mono<Community> findCommunityById(String communityId);
 }

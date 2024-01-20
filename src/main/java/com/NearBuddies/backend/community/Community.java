@@ -31,7 +31,4 @@ public class Community {
     // Image de la communauté
     byte[] profilPhoto;
     private List<Membership> members = new ArrayList<>();
-    public void addMember(User user){
-        members.add(new Membership(user));
-    }
 }
