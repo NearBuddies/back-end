@@ -6,12 +6,14 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Document(collection = "nearbuddies")
+@Document
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -23,20 +25,12 @@ public class Community {
     private Visibility visibility;
     private User creator;
     private User admin;
-    private String imgUrl;
-    private List<Membership> members;
 
-    public Community(String name, String description, Visibility visibility,
-                     User creator, User admin, String imgUrl) {
-        this.name = name;
-        this.description = description;
-        this.visibility = visibility;
-        this.creator = creator;
-        this.admin = admin;
-        this.imgUrl = imgUrl;
-        this.members = new ArrayList<Membership>();
-    }
+    // private String imgUrl;
 
+    // Image de la communauté
+    byte[] profilPhoto;
+    private List<Membership> members = new ArrayList<>();
     public void addMember(User user){
         members.add(new Membership(user));
     }
