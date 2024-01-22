@@ -20,4 +20,9 @@ public class UserServiceImpl implements UserService{
     public Mono<User> authenticate(String username, String password) {
         return userRepository.findByUsernameAndPassword(username, password);
     }
+    @Override
+    public User findUserById(String id){
+        User user = userRepository.findUserById(id).block();
+        return user;
+    }
 }
