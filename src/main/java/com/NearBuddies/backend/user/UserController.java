@@ -21,7 +21,7 @@ public class UserController {
                 .map(savedUser -> ResponseEntity.status(HttpStatus.CREATED).body(savedUser));
     }
 
-    @GetMapping("/signin")
+    @PostMapping("/signin")
     public Mono<ResponseEntity<User>> authenticateUser(@RequestBody User user) {
         return userService.authenticate(user.getUsername(), user.getPassword())
                 .map(authenticatedUser -> ResponseEntity.ok().body(authenticatedUser))
