@@ -13,6 +13,7 @@ import reactor.core.publisher.Mono;
 import java.io.IOException;
 
 import static com.NearBuddies.backend.Utils.PhotoUtils.compressPhoto;
+import static com.NearBuddies.backend.Utils.PhotoUtils.decompressPhoto;
 
 @Controller
 @RequestMapping("/community")
@@ -38,7 +39,10 @@ public class CommunityController {
     @GetMapping("/findOne/{id}")
     public Mono<ResponseEntity<Community>> findCommunityById(@PathVariable("id") String communityId){
         return this.communityService.findCommunityById(communityId)
-                                    .map( the_community ->  ResponseEntity.status(HttpStatus.OK).body(the_community));
+                                    .map( the_community ->  {
+                                        the_community.setProfilPhoto(decompressPhoto(the_community.getProfilPhoto()));
+                                        return ResponseEntity.status(HttpStatus.OK).body(the_community);
+                                    });
     }
 
     @PostMapping("/join/{userId}/{communityId}")
