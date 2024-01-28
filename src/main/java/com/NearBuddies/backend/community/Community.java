@@ -25,7 +25,6 @@ public class Community {
     private Visibility visibility;
     private User creator;
     private User admin;
-
     // private String imgUrl;
 
     // Image de la communauté

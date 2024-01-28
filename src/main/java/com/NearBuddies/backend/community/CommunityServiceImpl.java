@@ -7,12 +7,12 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.List;
 
 @Service
 public class CommunityServiceImpl implements CommunityService {
     private final CommunityRepository communityRepository;
-
-    // I add a repository for now
     final MembershipRepository membershipRepository;
     public CommunityServiceImpl(CommunityRepository communityRepository, MembershipRepository membershipRepository) {
         this.communityRepository = communityRepository;
@@ -32,6 +32,11 @@ public class CommunityServiceImpl implements CommunityService {
     @Override
     public Mono<Community> findCommunityById(String id){
         return this.communityRepository.findCommunityById(id);
+    }
+
+    @Override
+    public Mono<Community> findByMembersContaining(List<Membership> memberships) {
+       return this.communityRepository.findByMembersContaining(memberships);
     }
 
     @Override

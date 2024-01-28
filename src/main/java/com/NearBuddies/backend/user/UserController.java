@@ -25,6 +25,6 @@ public class UserController {
     public Mono<ResponseEntity<User>> authenticateUser(@RequestBody User user) {
         return userService.authenticate(user.getUsername(), user.getPassword())
                 .map(authenticatedUser -> ResponseEntity.ok().body(authenticatedUser))
-                .defaultIfEmpty(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
+                .defaultIfEmpty(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 }

@@ -14,6 +14,7 @@ import java.util.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Document
 public class Membership {
     @Id
     private String id;
