@@ -18,13 +18,16 @@ import java.util.Date;
 public class Membership {
     @Id
     private String id;
+    private String communityId;
     private LocalDateTime joinedAt;
     private LocalDateTime leftAt;
     private boolean isActive;
     private User user;
 
-    public Membership(LocalDateTime joinedAt, LocalDateTime leftAt, boolean isActive, User user){
+
+    public Membership(LocalDateTime joinedAt, String communityId, LocalDateTime leftAt, boolean isActive, User user){
         this.joinedAt = joinedAt;
+        this.communityId = communityId;
         this.leftAt = leftAt;
         this.isActive = isActive;
         this.user = user;

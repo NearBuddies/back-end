@@ -41,7 +41,9 @@ public class CommunityServiceImpl implements CommunityService {
 
     @Override
     public Mono<Community> join(Community community, User user) {
-        community.getMembers().add(this.membershipRepository.save(new Membership(LocalDateTime.now(),null,true,user)).block());
+        String id = community.getId();
+        System.out.println("Id is "+id);
+        community.getMembers().add(this.membershipRepository.save(new Membership(LocalDateTime.now(), id, null,true,user)).block());
         return communityRepository.save(community);
     }
 }

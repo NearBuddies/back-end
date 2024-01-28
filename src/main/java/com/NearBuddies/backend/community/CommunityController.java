@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.io.IOException;
@@ -55,8 +56,8 @@ public class CommunityController {
     @GetMapping("/findCommunitiesOfUser/{id}")
     public ResponseEntity<List<Community>> findCommunitiesOfUser(@PathVariable("id") String userId) {
         User user = this.userService.findUserById(userId);
-        Membership membership = this.membershipRepository.findByUser(user).block();
-        List<Community> communities = this.communityService.findByMembersContaining(Arrays.asList(membership))
+        List<Membership> memberships = this.membershipRepository.findByUser(user).collectList().block();
+        List<Community> communities = this.communityService.findByMembersContaining(memberships)
                 .collectList()
                 .block();
         for (Community community : communities) {
@@ -68,12 +69,17 @@ public class CommunityController {
     @PostMapping("/join/{userId}/{communityId}")
     public Mono<ResponseEntity<?>> joinCommunity(@PathVariable("communityId") String communityId,
                                                  @PathVariable("userId") String userId) {
-        Community community = communityService.findById(communityId);
         User user = userService.findUserById(userId);
-        return this.communityService.join(community, user)
-                .map( the_community ->
-                     ResponseEntity.status(HttpStatus.OK).body(the_community)
-                );
+        Community community = communityService.findById(communityId);
+        boolean userExists = this.membershipRepository.existsByUserAndCommunityId(user,communityId).block();
+        if (userExists) {
+            // User already in community
+            return Mono.just(ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User already in the community"));
+        } else {
+            return this.communityService.join(community, user)
+                    .map(the_community -> ResponseEntity.status(HttpStatus.OK).body(the_community));
+        }
     }
+
 
 }
