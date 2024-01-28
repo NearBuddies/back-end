@@ -14,6 +14,7 @@ import reactor.core.publisher.Mono;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.List;
 
 import static com.NearBuddies.backend.Utils.PhotoUtils.compressPhoto;
 import static com.NearBuddies.backend.Utils.PhotoUtils.decompressPhoto;
@@ -52,16 +53,16 @@ public class CommunityController {
     }
 
     @GetMapping("/findCommunitiesOfUser/{id}")
-    public Mono<ResponseEntity<Community>> findCommunitiesOfUser(@PathVariable("id") String userId){
+    public ResponseEntity<List<Community>> findCommunitiesOfUser(@PathVariable("id") String userId) {
         User user = this.userService.findUserById(userId);
         Membership membership = this.membershipRepository.findByUser(user).block();
-        return this.communityService.findByMembersContaining(
-                        Arrays.asList(membership)
-                )
-                .map( the_community ->  {
-                    the_community.setProfilPhoto(decompressPhoto(the_community.getProfilPhoto()));
-                    return ResponseEntity.status(HttpStatus.OK).body(the_community);
-                });
+        List<Community> communities = this.communityService.findByMembersContaining(Arrays.asList(membership))
+                .collectList()
+                .block();
+        for (Community community : communities) {
+            community.setProfilPhoto(decompressPhoto(community.getProfilPhoto()));
+        }
+        return new ResponseEntity<>(communities, HttpStatus.OK);
     }
 
     @PostMapping("/join/{userId}/{communityId}")

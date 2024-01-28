@@ -4,10 +4,10 @@ import com.NearBuddies.backend.membership.Membership;
 import com.NearBuddies.backend.membership.MembershipRepository;
 import com.NearBuddies.backend.user.User;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -35,7 +35,7 @@ public class CommunityServiceImpl implements CommunityService {
     }
 
     @Override
-    public Mono<Community> findByMembersContaining(List<Membership> memberships) {
+    public Flux<Community> findByMembersContaining(List<Membership> memberships) {
        return this.communityRepository.findByMembersContaining(memberships);
     }
 

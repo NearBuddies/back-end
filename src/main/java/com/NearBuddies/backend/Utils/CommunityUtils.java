@@ -12,7 +12,7 @@ public class CommunityUtils {
             ObjectMapper objectMapper = new ObjectMapper();
             communityCrafted = objectMapper.readValue(community, Community.class);
         } catch (IOException err) {
-            System.out.printf("Error", err.toString());
+            System.out.printf("Error", err);
         }
         return communityCrafted;
     }

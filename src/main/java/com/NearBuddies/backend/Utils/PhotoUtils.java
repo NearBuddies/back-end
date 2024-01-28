@@ -24,7 +24,7 @@ public class PhotoUtils {
         return outputStream.toByteArray();
     }
 
-    //  Decompresser le CV pour le sortir de la base de données
+    //  Decompresser la photo pour la sortir de la base de données
     public static byte[] decompressPhoto(byte[] data) {
         Inflater inflater = new Inflater();
         inflater.setInput(data);

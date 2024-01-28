@@ -2,6 +2,7 @@ package com.NearBuddies.backend.community;
 
 import com.NearBuddies.backend.membership.Membership;
 import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
@@ -10,5 +11,5 @@ public interface CommunityRepository extends ReactiveMongoRepository<Community, 
      Mono<Community> findCommunityById(String id);
      Mono<Community> findById(String id);
 
-     Mono<Community> findByMembersContaining(List<Membership> memberships);
+     Flux<Community> findByMembersContaining(List<Membership> memberships);
 }
