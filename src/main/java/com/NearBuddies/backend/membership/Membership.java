@@ -18,14 +18,13 @@ public class Membership {
     @Id
     private String id;
     private LocalDateTime joinedAt;
-    private LocalDateTime leftAt;
+    private LocalDateTime leftAt = null;
     private boolean isActive;
     private User user;
 
-    public Membership(LocalDateTime joinedAt, LocalDateTime leftAt, boolean isActive, User user){
-        this.joinedAt = joinedAt;
-        this.leftAt = leftAt;
-        this.isActive = isActive;
+    public Membership(User user){
+        this.joinedAt = LocalDateTime.now();
+        this.isActive = leftAt==null;
         this.user = user;
     }
 }

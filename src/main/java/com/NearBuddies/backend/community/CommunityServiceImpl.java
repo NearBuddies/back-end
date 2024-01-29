@@ -11,9 +11,8 @@ import java.time.LocalDateTime;
 @Service
 public class CommunityServiceImpl implements CommunityService {
     private final CommunityRepository communityRepository;
-
     // I add a repository for now
-    final MembershipRepository membershipRepository;
+    private final MembershipRepository membershipRepository;
     public CommunityServiceImpl(CommunityRepository communityRepository, MembershipRepository membershipRepository) {
         this.communityRepository = communityRepository;
         this.membershipRepository = membershipRepository;
@@ -25,7 +24,9 @@ public class CommunityServiceImpl implements CommunityService {
     }
 
     @Override
-    public Mono<Community> create(Community community) {
+    public Mono<Community> create(Community community, User creator) {
+        community.setCreator(creator);
+        community.setAdmin(creator);
         return communityRepository.save(community);
     }
 
@@ -35,8 +36,13 @@ public class CommunityServiceImpl implements CommunityService {
     }
 
     @Override
+    public Mono<Community> addAdmin(Community community, User user) {
+        return null;
+    }
+
+    @Override
     public Mono<Community> join(Community community, User user) {
-        community.getMembers().add(this.membershipRepository.save(new Membership(LocalDateTime.now(),null,true,user)).block());
+        community.getMembers().add(this.membershipRepository.save(new Membership(user)).block());
         return communityRepository.save(community);
     }
 }

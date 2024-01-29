@@ -4,9 +4,9 @@ import com.NearBuddies.backend.user.User;
 import reactor.core.publisher.Mono;
 
 public interface CommunityService {
-    Community findById(String id);
-    public Mono<Community> create(Community community);
+    public Community findById(String id);
+    public Mono<Community> create(Community community, User creator);
     public Mono<Community> join(Community community, User user);
-
-    Mono<Community> findCommunityById(String communityId);
+    public Mono<Community> findCommunityById(String communityId);
+    public Mono<Community> addAdmin(Community community, User user);
 }

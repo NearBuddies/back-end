@@ -1,6 +1,7 @@
 package com.NearBuddies.backend.community;
 
 import com.NearBuddies.backend.Utils.CommunityUtils;
+import com.NearBuddies.backend.Utils.UserUtils;
 import com.NearBuddies.backend.user.User;
 import com.NearBuddies.backend.user.UserService;
 import org.springframework.http.HttpStatus;
@@ -19,7 +20,7 @@ import static com.NearBuddies.backend.Utils.PhotoUtils.decompressPhoto;
 @RequestMapping("/community")
 public class CommunityController {
     private final CommunityService communityService;
-    final UserService userService;
+    private final UserService userService;
 
     public CommunityController(CommunityService communityService, UserService userService) {
         this.communityService = communityService;
@@ -28,11 +29,13 @@ public class CommunityController {
 
     @PostMapping(value = "/new")
     public ResponseEntity<Community> createCommunity(@RequestPart("body") String communityString,
-                                                     @RequestPart("photo") MultipartFile profilPhoto) throws IOException {
+                                                     @RequestPart("photo") MultipartFile profilPhoto,
+                                                     @RequestPart("user") String creatorString) throws IOException {
         byte[] photoInByte = compressPhoto(profilPhoto.getBytes());
         Community community = CommunityUtils.getCommunityFromString(communityString);
         community.setProfilPhoto(photoInByte);
-        Community savedCommunity = this.communityService.create(community).block();
+        User creator = UserUtils.getUserFromString(creatorString);
+        Community savedCommunity = this.communityService.create(community, creator).block();
         return ResponseEntity.status(HttpStatus.CREATED).body(savedCommunity);
     }
 
