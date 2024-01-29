@@ -8,6 +8,7 @@ import reactor.core.publisher.Mono;
 import java.util.List;
 
 public interface CommunityService {
+
     Community findById(String id);
     Mono<Community> create(Community community);
     Mono<Community> join(Community community, User user);

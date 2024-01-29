@@ -14,6 +14,7 @@ import java.util.List;
 public class CommunityServiceImpl implements CommunityService {
     private final CommunityRepository communityRepository;
     final MembershipRepository membershipRepository;
+
     public CommunityServiceImpl(CommunityRepository communityRepository, MembershipRepository membershipRepository) {
         this.communityRepository = communityRepository;
         this.membershipRepository = membershipRepository;
@@ -36,7 +37,7 @@ public class CommunityServiceImpl implements CommunityService {
 
     @Override
     public Flux<Community> findByMembersContaining(List<Membership> memberships) {
-       return this.communityRepository.findByMembersContaining(memberships);
+        return this.communityRepository.findByMembersContaining(memberships);
     }
 
     @Override

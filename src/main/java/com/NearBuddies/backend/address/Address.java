@@ -1,2 +1,4 @@
-package com.NearBuddies.backend.address;public class Address {
+package com.NearBuddies.backend.address;
+
+public class Address {
 }

@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.data.mongodb.core.mapping.DocumentReference;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,11 +23,8 @@ public class Community {
     private String name;
     private String description;
     private Visibility visibility;
-    private User creator;
-    private User admin;
-    // private String imgUrl;
-
     // Image de la communauté
     byte[] profilPhoto;
+    @DocumentReference
     private List<Membership> members = new ArrayList<>();
 }
