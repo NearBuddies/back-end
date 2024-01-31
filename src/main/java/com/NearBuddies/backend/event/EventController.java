@@ -2,7 +2,7 @@ package com.NearBuddies.backend.event;
 
 
 import com.NearBuddies.backend.Utils.EventUtils;
-import com.NearBuddies.backend.membership.MembershipRepository;
+import com.NearBuddies.backend.registration.RegistrationRepository;
 import com.NearBuddies.backend.registration.Status;
 import com.NearBuddies.backend.registration.Type;
 import com.NearBuddies.backend.user.User;
@@ -25,12 +25,12 @@ public class EventController {
 
     private final EventService eventService;
     private final UserService userService;
-    private final MembershipRepository membershipRepository;
+    private final RegistrationRepository registrationRepository;
 
-    public EventController(EventService eventService, UserService userService, MembershipRepository membershipRepository) {
+    public EventController(EventService eventService, UserService userService, RegistrationRepository registrationRepository) {
         this.eventService = eventService;
         this.userService = userService;
-        this.membershipRepository = membershipRepository;
+        this.registrationRepository = registrationRepository;
     }
 
     @PostMapping(value = "/new")
@@ -63,7 +63,7 @@ public class EventController {
         User user = userService.findUserById(userId);
         Type type = Type.fromString(typeString);
         Status status = Status.fromString(statusString);
-        boolean userRegistered = this.membershipRepository.existsByUserAndCommunityId(user, eventId).block();
+        boolean userRegistered = this.registrationRepository.existsByAttendeeAndEventId(user, eventId).block();
         if(userRegistered){
             return Mono.just(ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User already registered for the event!"));
         }else {
