@@ -14,4 +14,12 @@ public enum Status {
     public String getDisplayName() {
         return displayName;
     }
+    public static Status fromString(String status) {
+        for (Status enumStatus : Status.values()) {
+            if (enumStatus.name().equalsIgnoreCase(status)) {
+                return enumStatus;
+            }
+        }
+        throw new IllegalArgumentException("Unknown enum constant: " + status);
+    }
 }

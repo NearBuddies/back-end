@@ -13,4 +13,13 @@ public enum Type {
     public String getDisplayName() {
         return displayName;
     }
+
+    public static Type fromString(String type) {
+        for (Type enumType : Type.values()) {
+            if (enumType.name().equalsIgnoreCase(type)) {
+                return enumType;
+            }
+        }
+        throw new IllegalArgumentException("Unknown enum constant: " + type);
+    }
 }

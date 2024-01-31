@@ -1,21 +1,24 @@
 package com.NearBuddies.backend.registration;
 
-import com.NearBuddies.backend.event.Type;
+import com.NearBuddies.backend.registration.Type;
 import com.NearBuddies.backend.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.DocumentReference;
 
 import java.time.LocalDateTime;
 
+@Document(collection = "nearbuddies")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class Registration {
     @Id
     private String Id;
+    private String eventId;
     @DocumentReference
     private User attendee;
     private Type type;
@@ -24,10 +27,13 @@ public class Registration {
     private LocalDateTime canceledAt = null;
     private boolean isAttending;
 
-    public Registration(User attendee){
+    public Registration(String eventId, User attendee, Type type, Status status, LocalDateTime registredAt, LocalDateTime canceledAt, boolean isAttending){
+        this.eventId = eventId;
         this.attendee = attendee;
-        registredAt = LocalDateTime.now();
-        canceledAt = null;
-        isAttending = canceledAt==null;
+        this.type = type;
+        this.status = status;
+        this.registredAt = registredAt;
+        this.canceledAt = canceledAt;
+        this.isAttending = isAttending;
     }
 }
