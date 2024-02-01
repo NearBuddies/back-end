@@ -27,4 +27,11 @@ public class UserController {
                 .map(authenticatedUser -> ResponseEntity.ok().body(authenticatedUser))
                 .defaultIfEmpty(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
+
+    @PostMapping("/credits/add/{userId}")
+    public Mono<ResponseEntity<User>> registerForEvent(@PathVariable("userId") String userId,
+                                                    @RequestParam("credits") int credits){
+        User user = userService.findUserById(userId);
+        return userService.addCredits(user, credits) .map(savedUser -> ResponseEntity.status(HttpStatus.CREATED).body(savedUser));
+    }
 }

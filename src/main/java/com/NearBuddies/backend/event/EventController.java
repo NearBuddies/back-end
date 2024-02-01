@@ -67,10 +67,14 @@ public class EventController {
         if(userRegistered){
             return Mono.just(ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User already registered for the event!"));
         }else {
-            return this.eventService.register(event, user, type, status)
-                    .map(updatedEvent ->
-                            ResponseEntity.status(HttpStatus.OK).body(updatedEvent)
-                    );
+            if(user.getCredits()<event.getCredits()){
+                return Mono.just(ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User don't have enough credits to register!"));
+            }else{
+                return this.eventService.register(event, user, type, status)
+                        .map(updatedEvent ->
+                                ResponseEntity.status(HttpStatus.OK).body(updatedEvent)
+                        );
+            }
         }
     }
 }

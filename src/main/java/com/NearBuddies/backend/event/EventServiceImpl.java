@@ -32,6 +32,10 @@ public class EventServiceImpl implements EventService{
     @Override
     public Mono<Event> register(Event event, User user, Type type, Status status) {
         String eventId = event.getId();
+        user.subtractCredits(event.getCredits());
+        userRepository.save(user);
+        event.getOrganizer().addCredits(event.getCredits());
+        userRepository.save(event.getOrganizer());
         event.getRegistrations().add(registrationRepository.save(new Registration(eventId, user, type, status, LocalDateTime.now(), null, true)).block());
         return eventRepository.save(event);
     }

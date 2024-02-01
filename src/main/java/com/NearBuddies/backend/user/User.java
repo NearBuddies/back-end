@@ -20,4 +20,12 @@ public class User {
     private String firstName;
     private String lastName;
     private int credits;
+
+    public void addCredits(int credits){
+        this.credits+=credits;
+    }
+
+    public void subtractCredits(int credits){
+        this.credits-=credits;
+    }
 }
