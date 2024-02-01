@@ -30,9 +30,9 @@ public class Event {
     private Address address;
     byte[] poster;
     private int credits;
-    @DocumentReference
+    //@DocumentReference
     private User organizer;
-    @DocumentReference
+    //@DocumentReference
     private List<Registration> registrations = new ArrayList<>();  // List of registered memebers
     @DocumentReference
     private List<Rating> ratings = new ArrayList<>();
