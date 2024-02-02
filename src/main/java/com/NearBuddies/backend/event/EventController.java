@@ -68,7 +68,7 @@ public class EventController {
         Type type = Type.fromString(typeString);
         Status status = Status.fromString(statusString);
         Community community = communityRepository.findById(event.getCommunityId()).block();
-        boolean userRegistered = registrationRepository.existsByAttendeeAndEventId(user, eventId).block();
+        boolean userRegistered = registrationRepository.existsByEventIdAndAttendeeId(eventId, user.getId()).block();
         if(!userRegistered) System.out.println("User not found");
         if(userRegistered){
             return Mono.just(ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User already registered for the event!"));

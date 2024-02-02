@@ -7,5 +7,5 @@ import reactor.core.publisher.Mono;
 
 public interface MembershipRepository extends ReactiveMongoRepository<Membership, String> {
     Flux<Membership> findByUser(User user);
-    Mono<Boolean> existsByUserAndCommunityId(User attendee, String communityId);
+    Mono<Boolean> existsByUserAndCommunityId(User user, String communityId);
 }

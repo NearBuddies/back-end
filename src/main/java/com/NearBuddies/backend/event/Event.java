@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-@Document(collection = "nearbuddies")
+//@Document(collection = "nearbuddies")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

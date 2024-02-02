@@ -14,7 +14,7 @@ import java.util.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Document(collection = "nearbuddies")
+//@Document(collection = "nearbuddies")
 public class Membership {
     @Id
     private String id;

@@ -11,7 +11,7 @@ import org.springframework.data.mongodb.core.mapping.DocumentReference;
 
 import java.time.LocalDateTime;
 
-@Document(collection = "nearbuddies")
+//@Document(collection = "nearbuddies")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
