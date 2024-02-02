@@ -68,13 +68,15 @@ public class EventController {
         Type type = Type.fromString(typeString);
         Status status = Status.fromString(statusString);
         Community community = communityRepository.findById(event.getCommunityId()).block();
-        boolean userRegistered = this.registrationRepository.existsByAttendeeAndEventId(user, eventId).block();
+        boolean userRegistered = registrationRepository.existsByAttendeeAndEventId(user, eventId).block();
+        if(!userRegistered) System.out.println("User not found");
         if(userRegistered){
             return Mono.just(ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User already registered for the event!"));
         }else {
             if(user.getCredits()<event.getCredits()){
                 return Mono.just(ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User don't have enough credits to register!"));
             }else{
+
                 return this.eventService.register(event, user, type, status, community)
                         .map(updatedEvent ->
                                 ResponseEntity.status(HttpStatus.OK).body(updatedEvent)

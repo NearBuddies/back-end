@@ -32,4 +32,9 @@ public class UserServiceImpl implements UserService{
         User user = userRepository.findUserById(id).block();
         return user;
     }
+
+    @Override
+    public Mono<User> findById(String id) {
+        return userRepository.findById(id);
+    }
 }

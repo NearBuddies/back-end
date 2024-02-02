@@ -10,6 +10,9 @@ spring:
       authentication-database: admin
       username: root
       password: rootpassword
+  mvc:
+    async:
+      request-timeout: 60000
 
 server:
   port: 8080
