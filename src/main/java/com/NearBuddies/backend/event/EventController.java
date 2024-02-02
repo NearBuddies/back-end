@@ -2,6 +2,8 @@ package com.NearBuddies.backend.event;
 
 
 import com.NearBuddies.backend.Utils.EventUtils;
+import com.NearBuddies.backend.community.Community;
+import com.NearBuddies.backend.community.CommunityRepository;
 import com.NearBuddies.backend.registration.RegistrationRepository;
 import com.NearBuddies.backend.registration.Status;
 import com.NearBuddies.backend.registration.Type;
@@ -26,11 +28,13 @@ public class EventController {
     private final EventService eventService;
     private final UserService userService;
     private final RegistrationRepository registrationRepository;
+    private final CommunityRepository communityRepository;
 
-    public EventController(EventService eventService, UserService userService, RegistrationRepository registrationRepository) {
+    public EventController(EventService eventService, UserService userService, RegistrationRepository registrationRepository, CommunityRepository communityRepository) {
         this.eventService = eventService;
         this.userService = userService;
         this.registrationRepository = registrationRepository;
+        this.communityRepository = communityRepository;
     }
 
     @PostMapping(value = "/new")
@@ -63,6 +67,7 @@ public class EventController {
         User user = userService.findUserById(userId);
         Type type = Type.fromString(typeString);
         Status status = Status.fromString(statusString);
+        Community community = communityRepository.findById(event.getCommunityId()).block();
         boolean userRegistered = this.registrationRepository.existsByAttendeeAndEventId(user, eventId).block();
         if(userRegistered){
             return Mono.just(ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User already registered for the event!"));
@@ -70,7 +75,7 @@ public class EventController {
             if(user.getCredits()<event.getCredits()){
                 return Mono.just(ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User don't have enough credits to register!"));
             }else{
-                return this.eventService.register(event, user, type, status)
+                return this.eventService.register(event, user, type, status, community)
                         .map(updatedEvent ->
                                 ResponseEntity.status(HttpStatus.OK).body(updatedEvent)
                         );

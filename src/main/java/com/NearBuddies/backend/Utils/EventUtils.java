@@ -12,7 +12,7 @@ public class EventUtils {
             ObjectMapper objectMapper = new ObjectMapper();
             event = objectMapper.readValue(eventString, Event.class);
         } catch (IOException err) {
-            System.out.printf("Error", err.toString());
+            System.out.printf("Error mapping Event", err.toString());
         }
         return event;
     }

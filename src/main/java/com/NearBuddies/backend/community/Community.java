@@ -1,5 +1,6 @@
 package com.NearBuddies.backend.community;
 
+import com.NearBuddies.backend.event.Event;
 import com.NearBuddies.backend.membership.Membership;
 import com.NearBuddies.backend.user.User;
 import lombok.AllArgsConstructor;
@@ -25,6 +26,6 @@ public class Community {
     private Visibility visibility;
     // Image de la communauté
     byte[] profilPhoto;
-    @DocumentReference
     private List<Membership> members = new ArrayList<>();
+    private List<Event> events = new ArrayList<>();
 }

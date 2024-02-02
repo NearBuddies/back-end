@@ -17,9 +17,8 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class Registration {
     @Id
-    private String Id;
+    private String id;
     private String eventId;
-    @DocumentReference
     private User attendee;
     private Type type;
     private Status status;
