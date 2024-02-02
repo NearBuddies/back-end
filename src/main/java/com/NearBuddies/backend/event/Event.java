@@ -16,7 +16,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-@Document(collection = "nearbuddies")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -30,12 +29,8 @@ public class Event {
     private Address address;
     byte[] poster;
     private int credits;
-    //@DocumentReference
     private User organizer;
-    //@DocumentReference
     private List<Registration> registrations = new ArrayList<>();  // List of registered memebers
-    @DocumentReference
     private List<Rating> ratings = new ArrayList<>();
-    @DocumentReference
     private List<Comment> comments = new ArrayList<>();
 }

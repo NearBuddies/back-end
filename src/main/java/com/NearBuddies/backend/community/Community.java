@@ -13,7 +13,6 @@ import org.springframework.data.mongodb.core.mapping.DocumentReference;
 import java.util.ArrayList;
 import java.util.List;
 
-@Document(collection = "nearbuddies")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -25,6 +24,5 @@ public class Community {
     private Visibility visibility;
     // Image de la communauté
     byte[] profilPhoto;
-    @DocumentReference
     private List<Membership> members = new ArrayList<>();
 }
