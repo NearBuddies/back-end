@@ -37,14 +37,33 @@ public class EventServiceImpl implements EventService{
     @Override
     public Mono<Event> register(Event event, User user, Type type, Status status, Community community) {
         String eventId = event.getId();
+
+        // Subtract credits from the user
         user.subtractCredits(event.getCredits());
-        userRepository.save(user);
-        event.getOrganizer().addCredits(event.getCredits());
-        userRepository.save(event.getOrganizer());
-        community.getEvents().add(event);
-        communityRepository.save(community);
-        event.getRegistrations().add(registrationRepository.save(new Registration(eventId, user, type, status, LocalDateTime.now(), null, true)).block());
-        return eventRepository.save(event);
+
+        // Save the updated user (returns a Mono<User>)
+        Mono<User> savedUserMono = userRepository.save(user);
+
+        // Perform additional operations when the user is saved
+        return savedUserMono.flatMap(savedUser -> {
+            // Add credits to the organizer
+            event.getOrganizer().addCredits(event.getCredits());
+            userRepository.save(event.getOrganizer()).subscribe();  // Subscribe to save the organizer asynchronously
+
+            // Add the event to the community
+            community.getEvents().add(event);
+            communityRepository.save(community).subscribe();  // Subscribe to save the community asynchronously
+
+            // Create and save the registration
+            Registration registration = new Registration(eventId, savedUser, type, status, LocalDateTime.now(), null, true);
+            return registrationRepository.save(registration).map(savedRegistration -> {
+                // Add the registration to the event
+                event.getRegistrations().add(savedRegistration);
+
+                // Save the updated event and return the result
+                return eventRepository.save(event);
+            });
+        }).block();
     }
 
     @Override
