@@ -61,7 +61,11 @@ public class EventController {
 
     @GetMapping("/communityEvents/{id}")
     public ResponseEntity<List<Event>> findEventByCommunity(@PathVariable("id") String communityId){
-        return new ResponseEntity<>(eventService.eventsByCommunity(communityId).collectList().block(), HttpStatus.OK);
+        List<Event> events = eventService.eventsByCommunity(communityId).collectList().block();
+        for (Event event : events) {
+            event.setPoster(decompressPhoto(event.getPoster()));
+        }
+        return new ResponseEntity<>(events, HttpStatus.OK);
     }
 
 
