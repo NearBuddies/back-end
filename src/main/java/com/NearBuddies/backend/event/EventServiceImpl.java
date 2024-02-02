@@ -9,6 +9,7 @@ import com.NearBuddies.backend.registration.Type;
 import com.NearBuddies.backend.user.User;
 import com.NearBuddies.backend.user.UserRepository;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.time.LocalDateTime;
@@ -47,7 +48,28 @@ public class EventServiceImpl implements EventService{
     }
 
     @Override
+    public Mono<Event> cancel(Event event, User user) {
+        return registrationRepository.findByEventIdAndAttendeeId(event.getId(), user.getId())
+                .flatMap(registration -> {
+                    System.out.println("Registration to be deleted: " + registration.getId());
+                    return registrationRepository.delete(registration)
+                            .doOnSuccess(deleted -> {
+                                System.out.println("Registration deleted: " + deleted);
+                                event.getRegistrations().remove(registration);
+                            })
+                            .then(eventRepository.save(event))
+                            .doOnSuccess(updatedEvent -> {
+                                System.out.println("Event updated: " + updatedEvent.getId());
+                            });
+                });
+    }
+    @Override
     public Mono<Event> findById(String Id) {
         return this.eventRepository.findById(Id);
+    }
+
+    @Override
+    public Flux<Event> eventsByCommunity(String communityId) {
+        return eventRepository.findByCommunityId(communityId);
     }
 }

@@ -17,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import reactor.core.publisher.Mono;
 
 import java.io.IOException;
+import java.util.List;
 
 import static com.NearBuddies.backend.Utils.PhotoUtils.compressPhoto;
 import static com.NearBuddies.backend.Utils.PhotoUtils.decompressPhoto;
@@ -58,18 +59,23 @@ public class EventController {
                 });
     }
 
-    @PostMapping("/register/{userId}/{eventId}")
+    @GetMapping("/communityEvents/{id}")
+    public ResponseEntity<List<Event>> findEventByCommunity(@PathVariable("id") String communityId){
+        return new ResponseEntity<>(eventService.eventsByCommunity(communityId).collectList().block(), HttpStatus.OK);
+    }
+
+
+    @PostMapping("/register/{userId}/{eventId}/{type}/{status}")
     public Mono<ResponseEntity<?>> registerForEvent(@PathVariable("userId") String userId,
                                                     @PathVariable("eventId") String eventId,
-                                                    @RequestParam("type") String typeString,
-                                                    @RequestParam("status") String statusString) {
+                                                    @PathVariable("type") String typeString,
+                                                    @PathVariable("status") String statusString) {
         Event event = eventService.findById(eventId).block();
         User user = userService.findUserById(userId);
         Type type = Type.fromString(typeString);
         Status status = Status.fromString(statusString);
         Community community = communityRepository.findById(event.getCommunityId()).block();
         boolean userRegistered = registrationRepository.existsByEventIdAndAttendeeId(eventId, user.getId()).block();
-        if(!userRegistered) System.out.println("User not found");
         if(userRegistered){
             return Mono.just(ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User already registered for the event!"));
         }else {
@@ -82,6 +88,23 @@ public class EventController {
                                 ResponseEntity.status(HttpStatus.OK).body(updatedEvent)
                         );
             }
+        }
+    }
+
+    @PostMapping("/cancel/{userId}/{eventId}")
+    public Mono<ResponseEntity<?>> cancelRegistration(@PathVariable("userId") String userId,
+                                                    @PathVariable("eventId") String eventId){
+        Event event = eventService.findById(eventId).block();
+        User user = userService.findUserById(userId);
+        boolean userRegistered = registrationRepository.existsByEventIdAndAttendeeId(eventId, user.getId()).block();
+        if(userRegistered){
+            return this.eventService.cancel(event, user)
+                    .map(updatedEvent ->
+                            ResponseEntity.status(HttpStatus.OK).body(updatedEvent)
+                    );
+        }else{
+
+            return Mono.just(ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User is not registered for event!"));
         }
     }
 }
