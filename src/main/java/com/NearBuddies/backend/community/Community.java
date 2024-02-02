@@ -25,6 +25,5 @@ public class Community {
     private Visibility visibility;
     // Image de la communauté
     byte[] profilPhoto;
-    @DocumentReference
     private List<Membership> members = new ArrayList<>();
 }

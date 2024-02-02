@@ -4,8 +4,9 @@ import com.NearBuddies.backend.registration.Registration;
 import com.NearBuddies.backend.registration.RegistrationRepository;
 import com.NearBuddies.backend.user.User;
 import com.NearBuddies.backend.user.UserRepository;
+import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
-
+@Service
 public class EventServiceImpl implements EventService{
     private final EventRepository eventRepository;
     private final UserRepository userRepository;

@@ -74,7 +74,7 @@ public class CommunityController {
                                                  @PathVariable("userId") String userId) {
         User user = userService.findUserById(userId);
         Community community = communityService.findById(communityId);
-        boolean userExists = this.membershipRepository.existsByUserAndCommunityId(user,communityId).block();
+        boolean userExists = Boolean.TRUE.equals(this.membershipRepository.existsByUserAndCommunityId(user, communityId).block());
         if (userExists) {
             // User already in community
             return Mono.just(ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User already in the community"));
