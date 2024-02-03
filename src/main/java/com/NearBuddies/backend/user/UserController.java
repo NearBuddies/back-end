@@ -30,8 +30,8 @@ public class UserController {
 
     @PostMapping("/credits/add/{userId}")
     public Mono<ResponseEntity<User>> registerForEvent(@PathVariable("userId") String userId,
-                                                    @RequestParam("credits") int credits){
+                                                    @RequestParam("credits") double credits){
         User user = userService.findUserById(userId);
-        return userService.addCredits(user, credits) .map(savedUser -> ResponseEntity.status(HttpStatus.CREATED).body(savedUser));
+        return userService.addCredits(user, (int)credits) .map(savedUser -> ResponseEntity.status(HttpStatus.CREATED).body(savedUser));
     }
 }
