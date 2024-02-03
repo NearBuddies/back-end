@@ -46,24 +46,29 @@ public class EventServiceImpl implements EventService{
 
         // Perform additional operations when the user is saved
         return savedUserMono.flatMap(savedUser -> {
-            // Add credits to the organizer
-            event.getOrganizer().addCredits(event.getCredits());
-            userRepository.save(event.getOrganizer()).subscribe();  // Subscribe to save the organizer asynchronously
+            // Retrieve the organizer by ID
+            return userRepository.findById(event.getOrganizer().getId()).flatMap(organizer -> {
+                // Add credits to the organizer
+                organizer.addCredits(event.getCredits());
 
-            // Add the event to the community
-            community.getEvents().add(event);
-            communityRepository.save(community).subscribe();  // Subscribe to save the community asynchronously
+                // Save the organizer, community, and registration asynchronously
+                return Mono.zip(
+                        userRepository.save(organizer),
+                        communityRepository.save(community),
+                        registrationRepository.save(new Registration(eventId, savedUser, type, status, LocalDateTime.now(), null, true))
+                ).flatMap(tuple -> {
+                    // Update the organizer, community, and event with saved results
+                    event.setOrganizer(tuple.getT1());
+                    communityRepository.save(community).subscribe();  // Subscribe to save the community asynchronously
 
-            // Create and save the registration
-            Registration registration = new Registration(eventId, savedUser, type, status, LocalDateTime.now(), null, true);
-            return registrationRepository.save(registration).map(savedRegistration -> {
-                // Add the registration to the event
-                event.getRegistrations().add(savedRegistration);
+                    // Add the registration to the event
+                    event.getRegistrations().add(tuple.getT3());
 
-                // Save the updated event and return the result
-                return eventRepository.save(event);
+                    // Save the updated event and return the result
+                    return eventRepository.save(event);
+                });
             });
-        }).block();
+        });
     }
 
     @Override
@@ -71,6 +76,9 @@ public class EventServiceImpl implements EventService{
         return registrationRepository.findByEventIdAndAttendeeId(event.getId(), user.getId())
                 .flatMap(registration -> {
                     System.out.println("Registration to be deleted: " + registration.getId());
+                    // Retrieve the credits from the registration
+                    int creditsToReturn = event.getCredits();
+
                     return registrationRepository.delete(registration)
                             .doOnSuccess(deleted -> {
                                 System.out.println("Registration deleted: " + deleted);
@@ -79,6 +87,14 @@ public class EventServiceImpl implements EventService{
                             .then(eventRepository.save(event))
                             .doOnSuccess(updatedEvent -> {
                                 System.out.println("Event updated: " + updatedEvent.getId());
+
+                                // Add credits back to the user
+                                user.addCredits(creditsToReturn);
+                                userRepository.save(user).subscribe();  // Subscribe to save the user asynchronously
+
+                                // Subtract credits from the organizer
+                                event.getOrganizer().subtractCredits(creditsToReturn);
+                                userRepository.save(event.getOrganizer()).subscribe();  // Subscribe to save the organizer asynchronously
                             });
                 });
     }
