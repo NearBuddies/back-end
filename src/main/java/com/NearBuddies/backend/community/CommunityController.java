@@ -59,7 +59,7 @@ public class CommunityController {
     @GetMapping("/findCommunitiesOfUser/{id}")
     public ResponseEntity<List<Community>> findCommunitiesOfUser(@PathVariable("id") String userId) {
         User user = this.userService.findUserById(userId);
-        List<Membership> memberships = this.membershipRepository.findByUser(user).collectList().block();
+        List<Membership> memberships = this.membershipRepository.findByUserId(userId).collectList().block();
         List<Community> communities = this.communityService.findByMembersContaining(memberships)
                 .collectList()
                 .block();
